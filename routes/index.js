@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
+var eventsearch = require('../controllers/eventsearch'); //my own google api controller
 
-/* GET home page. */
+
 router.get('/:eventname', function(req, res, next) {
   var event=req.params.eventname;
+  eventsearch.callGoogle(res,res,event);  //call google!
   res.render('index', { title: 'Test! ' + event });
 });
-
+/* GET home page and show that you must supply an event. */
 router.get('/', function(req, res, next) {
   var err = new Error('Must supply an event!');
   err.status = 500;
