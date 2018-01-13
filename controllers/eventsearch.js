@@ -1,23 +1,35 @@
-var http=require('http');
+var http = require('http');
 
-function callBing(res, resp, query){
-    var bingHost='http://api.cognitive.microsoft.com';
-    var bingPath='/bing/v7.0/search?q=';
-    var options={
-        host : bingHost,
-        port : 80,
-        path : bingPath + query,
-        method : 'GET'
+function callBing(res, resp, query, key) {
+    var host = 'api.cognitive.microsoft.com';
+    var path = '/bing/v7.0/search?q=';
+    var subscriptionKey = key;
+    var options = {
+        method: 'GET',
+        hostname: host,
+        path: path + '?q=' + encodeURIComponent(query),
+        headers: {
+            'Ocp-Apim-Subscription-Key': subscriptionKey,
+        }
     };
 
-    http.request(options,function(res){
-        console.log('STATUS:' + res.statusCode);
-        console.log('HEADERS:' + res.headers );
+    http.request(options, function (res) {        
+        console.log('HEADERS:');
+        for (var headeritem in res.headers){
+            console.log("item: " + res.headers[headeritem]);
+        }
         res.setEncoding('utf-8');
-        res.on('data', function(data){
+        res.on('data', function (data) {
             console.log('BODY:' + data);
+            var jsonresponse=JSON.stringify(data, null, '   ');
+            console.log(jsonresponse);
+        })
+        res.on('error', function(err){
+            console.log('Error! : + err');
         })
     }).end();
+
+
 }
 
-module.exports.callGoogle=callGoogle;
+module.exports.callBing = callBing;
