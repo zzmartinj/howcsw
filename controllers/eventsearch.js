@@ -1,8 +1,8 @@
-var https = require('https');
+var https = require('https'); // NOTE this is httpS, not http
 
-let host = 'api.cognitive.microsoft.com';
-let path = '/bing/v7.0/search';
 
+//My main handler to simply output what we get back from Bing. Over time, this has 
+//to return something vs just outputting it on the log.
 function processRequest(response) {
     let body = '';
     response.on('data', function (d) {
@@ -24,35 +24,23 @@ function processRequest(response) {
 }
 
 
-function callBing(request, response, query, key){
-    console.log('Searching the Web for: ' + query);
-    let request_params = {
-          method : 'GET',
-          hostname : host,
-          path : path + '?q=' + encodeURIComponent(query),
-          headers : {
-              'Ocp-Apim-Subscription-Key' : key,
-          }
-      };
-  
-      let req = https.request(request_params, processRequest);
-      req.end();
-  }
-/*
+//This is the main entry function. It sets up what's needed to make the request, then calls 
+//a function to process it and for now print it out (processRequest)
 function callBing(request, response, query, key) {
     let host = 'api.cognitive.microsoft.com';
     let path = '/bing/v7.0/search';
-
-    var options = {
+    console.log('Searching the Web for: ' + query);
+    let request_params = {
         method: 'GET',
         hostname: host,
-        path : path + '?q=' + encodeURIComponent(query),
+        path: path + '?q=' + encodeURIComponent(query),
         headers: {
-            'Ocp-Apim-Subscription-Key': key, //Note that key here is a required Azure subscription key!
+            'Ocp-Apim-Subscription-Key': key,
         }
     };
-    console.log("Calling with these options " + query);
-    http.request(options, processRequest).end();
 
-} */
+    var req = https.request(request_params, processRequest); //NOTE THIS IS HTTPS, not HTTP
+    req.end();
+}
+
 module.exports.callBing = callBing;
