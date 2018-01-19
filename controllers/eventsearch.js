@@ -15,6 +15,7 @@ function processRequest(response) {
             if (header.startsWith("bingapis-") || header.startsWith("x-msedge-"))
                 console.log(header + ": " + response.headers[header]);
         body = JSON.stringify(JSON.parse(body), null, '  ');
+        
         console.log('\nJSON Response:\n');
         console.log(body);
     });
@@ -29,11 +30,13 @@ function processRequest(response) {
 function callBing(request, response, query, key) {
     let host = 'api.cognitive.microsoft.com';
     let path = '/bing/v7.0/search';
+    let answercount=2;
     console.log('Searching the Web for: ' + query);
     let request_params = {
         method: 'GET',
         hostname: host,
-        path: path + '?q=' + encodeURIComponent(query),
+        
+        path: path + '?answerCount=' + answercount + '?q=' + encodeURIComponent(query),
         headers: {
             'Ocp-Apim-Subscription-Key': key,
         }
