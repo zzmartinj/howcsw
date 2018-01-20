@@ -14,15 +14,30 @@ function processRequest(response) {
             // header keys are lower-cased by Node.js
             if (header.startsWith("bingapis-") || header.startsWith("x-msedge-"))
                 console.log(header + ": " + response.headers[header]);
-        body = JSON.stringify(JSON.parse(body), null, '  ');
         
+        let responseJSON=JSON.parse(body);
+        responseJSON=filterJSONResponse(responseJSON);
         console.log('\nJSON Response:\n');
-        console.log(body);
+        console.log(JSON.stringify(responseJSON, null, '    '));
     });
     response.on('error', function (e) {
         console.log('Error: ' + e.message);
     });
 }
+
+//basic function scoped out to filter our JSON received
+function filterJSONResponse(jsonToFilter){
+     let returnJSON=[];
+     let webPages=jsonToFilter['webPages']['value'];
+     for (var i=0; i < webPages.length; i++){
+        let webPage=webPages[i];
+        console.log('Parsing a web page ' + webPage['url']);
+        returnJSON.push({webPage : webPage['url']}); //push our filtered result to our return JSON
+     };
+     return (returnJSON);
+     
+}
+
 
 
 //This is the main entry function. It sets up what's needed to make the request, then calls 
@@ -30,13 +45,13 @@ function processRequest(response) {
 function callBing(request, response, query, key) {
     let host = 'api.cognitive.microsoft.com';
     let path = '/bing/v7.0/search';
-    let answercount=2;
+    
+    let answercount='2';
     console.log('Searching the Web for: ' + query);
     let request_params = {
         method: 'GET',
-        hostname: host,
-        
-        path: path + '?answerCount=' + answercount + '?q=' + encodeURIComponent(query),
+        hostname: host,        
+        path: path + '?mkt=en-us&answerCount=' + answercount + '&q=' + encodeURIComponent(query),
         headers: {
             'Ocp-Apim-Subscription-Key': key,
         }
