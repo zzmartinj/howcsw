@@ -7,7 +7,7 @@ router.get('/:eventname', function(req, res, next) {
   var event=req.params.eventname;
   //var key=req.params.key;
   var key=req.query.key;
-  eventsearch.callBing(res,res,event, key);  //call Bing over Azure!
+  results=eventsearch.callBing(res,res,event, key);  //call Bing over Azure!
   res.render('index', { title: 'Test! ' + event });
 });
 /* GET home page and show that you must supply an event. */

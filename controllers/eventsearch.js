@@ -1,4 +1,5 @@
 var https = require('https'); // NOTE this is httpS, not http
+var request = require ('request');
 
 
 //My main handler to simply output what we get back from Bing. Over time, this has 
@@ -19,10 +20,12 @@ function processRequest(response) {
         responseJSON = filterJSONResponse(responseJSON);
         console.log('\nJSON Response:\n');
         console.log(JSON.stringify(responseJSON, null, '    '));
+        return (responseJSON);
     });
     response.on('error', function (e) {
         console.log('Error: ' + e.message);
     });
+
 }
 
 //basic function scoped out to filter our JSON received
@@ -30,9 +33,9 @@ function filterJSONResponse(jsonToFilter) {
     let returnJSON = [];
     let webPages = jsonToFilter['webPages']['value'];
     for (var i = 0; i < webPages.length; i++) {
-        let webPage = webPages[i];       
+        let webPage = webPages[i];
         //push our filtered result to our return JSON
-        returnJSON.push({ webPage: {url : webPage['url'],name: webPage['name'],snippet : webPage['snippet']} });
+        returnJSON.push({ webPage: { url: webPage['url'], name: webPage['name'], snippet: webPage['snippet'] } });
     };
     return (returnJSON);
 
@@ -56,8 +59,13 @@ function callBing(request, response, query, key) {
             'Ocp-Apim-Subscription-Key': key,
         }
     };
-
-    var req = https.request(request_params, processRequest); //NOTE THIS IS HTTPS, not HTTP
+    let results = '';
+    //NOTE THIS IS HTTPS, not HTTP    
+    var req = https.request(request_params, function (data) {
+        results = processRequest(data);
+        console.log('RESULTS: ' + results);        
+        return results;
+    }); 
     req.end();
 }
 
