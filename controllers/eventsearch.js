@@ -20,8 +20,7 @@ function processRequest(dataToParse) {
     let body = dataToParse;
     let responseJSON = JSON.parse(body);
     responseJSON = filterJSONResponse(responseJSON);
-    console.log(JSON.stringify(responseJSON, null, '    '));
-    return (responseJSON);
+    return (JSON.stringify(responseJSON, null, '    '));
 }
 
 //This is the main entry function. It sets up what's needed to make the request, then calls 
