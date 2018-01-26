@@ -26,7 +26,7 @@ function processRequest(dataToParse) {
 
 //This is the main entry function. It sets up what's needed to make the request, then calls 
 //a function to process it and for now print it out (processRequest)
-function callBing(query, key) {
+function callBing(res, query, key) {
     let host = 'https://api.cognitive.microsoft.com';
     let path = '/bing/v7.0/search';
     let url =host + path + '?mkt=en-us&answerCount=' + 2 + '&q=' + query;
@@ -42,9 +42,11 @@ function callBing(query, key) {
 
     axios.get(url, request_params).then(function (response) {
         console.log(response);
+        res.render('index', { title: 'Test! ' + response });
         //let data = processRequest(response);
         //console.log(data);
     });
+    
     /*
     request(request_params, function (err, response, data) {
         if (err) {
