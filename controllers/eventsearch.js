@@ -3,9 +3,9 @@ var request = require('request');
 var axios = require('axios');
 
 //basic function scoped out to filter our JSON received
-function filterJSONResponse(jsonToFilter) {
+function filterJSONResponse(webPages) {
     let returnJSON = [];
-    let webPages = jsonToFilter['webPages']['value'];
+    
     for (var i = 0; i < webPages.length; i++) {
         let webPage = webPages[i];
         //push our filtered result to our return JSON
@@ -18,9 +18,8 @@ function filterJSONResponse(jsonToFilter) {
 //My main handler to simply output what we get back from Bing. Over time, this has 
 //to return something vs just outputting it on the log.
 function processRequest(dataToParse) {
-    let body = dataToParse['data'];
-    let responseJSON = JSON.parse(body);
-    responseJSON = filterJSONResponse(responseJSON);
+    //let body = dataToParse['data'];   
+    let responseJSON = filterJSONResponse(responseJSON);
     return (JSON.stringify(responseJSON, null, '    '));
 }
 
@@ -40,22 +39,11 @@ function callBing(res, query, key) {
     };
     
 
-    axios.get(url, request_params).then(function (response) {
-        console.log(response);
-        res.render('index', { title: 'Test! ' + response });
-        //let data = processRequest(response);
-        //console.log(data);
+    axios.get(url, request_params).then(function (response) {            
+        let data=filterJSONResponse(response['data']['webPages']['value']);
+        console.log(JSON.stringify(data));
+        res.render('index', { title: 'Test! ' + JSON.stringify(data) });        
     });
-    
-    /*
-    request(request_params, function (err, response, data) {
-        if (err) {
-            console.log("Error! " + err);
-        }
-        data = processRequest(data);
-        console.log(data);
-    });
-    */
-}
+  }
 
 module.exports.callBing = callBing;
