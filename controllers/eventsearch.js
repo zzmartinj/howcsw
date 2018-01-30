@@ -1,5 +1,5 @@
-
-var request = require('request');
+var express = require('express');
+//var request = require('request');
 var axios = require('axios');
 
 //basic function scoped out to filter our JSON received
@@ -41,8 +41,9 @@ function callBing(res, query, key) {
     axios.get(url, request_params).then(function (response) {            
         //Filter out to what we are interested in only
         let data=filterJSONResponse(response['data']['webPages']['value']);
-        console.log(JSON.stringify(data));
-        res.write(JSON.stringify(data));       
+        //console.log(JSON.stringify(data));
+        //res.write(JSON.stringify(data));       
+        res.send(JSON.stringify(data));
     });
   }
 
