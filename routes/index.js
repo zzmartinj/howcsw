@@ -8,10 +8,8 @@ router.get('/:eventname', function (req, res, next) {
 
   var event = req.params.eventname;
   var key = req.query.key;
-  
   /*call Bing over Azure! */
-  eventsearch.callBing(res, event,key);  
-  
+  eventsearch.callBing(res, event, key);
 
 });
 

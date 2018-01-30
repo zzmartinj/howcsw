@@ -38,11 +38,11 @@ function callBing(res, query, key) {
         }
     };
     
-
     axios.get(url, request_params).then(function (response) {            
+        //Filter out to what we are interested in only
         let data=filterJSONResponse(response['data']['webPages']['value']);
         console.log(JSON.stringify(data));
-        res.render('index', { title: 'Test! ' + JSON.stringify(data) });        
+        res.write(JSON.stringify(data));       
     });
   }
 
