@@ -31,7 +31,7 @@ function callBing(res, query, key) {
     let url =host + path + '?mkt=en-us&answerCount=' + 2 + '&q=' + query;
 
     let answercount = '2';
-    console.log('Searching the Web for: ' + query);
+    console.log('Searching the Web for: ' + query); 
     let request_params = {               
         headers: {
             'Ocp-Apim-Subscription-Key': key,
@@ -42,8 +42,9 @@ function callBing(res, query, key) {
         //Filter out to what we are interested in only
         let data=filterJSONResponse(response['data']['webPages']['value']);
         //console.log(JSON.stringify(data));
-        //res.write(JSON.stringify(data));       
-        res.send(JSON.stringify(data));
+        //res.write(JSON.stringify(data));    
+        res.render('index', {title : query, message : JSON.stringify(data)})   
+        //res.send(JSON.stringify(data));
     });
   }
 
